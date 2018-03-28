@@ -6,7 +6,18 @@
 </head>
 <body>
     <div id="app">
-        {{msg}}
+        <ul>
+            <li v-for="product in products">
+                <br>
+                <ul>
+                    <li v-for="(item,key) of product">
+                        {{key}} : {{item}}
+                    </li>
+                </ul>
+                <hr>
+            </li>
+
+        </ul>
     </div>
 </body>
 <script src="./node_modules/vue/dist/vue.js"></script>
@@ -14,16 +25,21 @@
 <script>
     var vm = new Vue({
         el: '#app',
+        //专门用来发送ajax的方法
+        //created 在数据被初始化后会调用 this指向值的是vm实例
+        created(){
+            axios.get('./tsconfig.json').then(respone =>{
+                this.products = respone.data.products;
+
+            })
+        },
         data: {
-            msg: 'hello world'
+            msg: 'hello world',
+            products :[]
         }
+
     })
-    axios.get('./tsconfig.json').then(function(respone){
-        console.log(respone);
-    })
-        .catch(function (error) {
-            console.log(error);
-        })
+
 </script>
 
 </html>

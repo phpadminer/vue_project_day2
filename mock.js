@@ -10,8 +10,8 @@ var data = Mock.mock({
             'images':'@image',
             'title':'@title',
             'info':'@sentence',
-            'price':'@float',
-            'num':'@integer',
+            'price':'@float(1.00,100,0,3)',
+            'num':'@integer(1,10)',
             'count':'',
             'isSelect':'@boolean'
         }
