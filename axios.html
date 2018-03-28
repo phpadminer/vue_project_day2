@@ -30,7 +30,6 @@
         created(){
             axios.get('./tsconfig.json').then(respone =>{
                 this.products = respone.data.products;
-
             })
         },
         data: {
