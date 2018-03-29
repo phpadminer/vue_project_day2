@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+<div id="app">
+    <div class="container">
+        <div class="row">
+            <table class="table table-hover table-bordered">
+                <h2 class="center">购物车</h2>
+                <tr>
+                    <!--click点击是 checkbox这时候状态还没有变化 所以这里用change事件-->
+                    <th>全选  <input type="checkbox" v-model="CheckAll" @change="change"></th>
+                    <th>序号</th>
+                    <th>商品</th>
+                    <th>商品名称</th>
+                    <th>商品信息</th>
+                    <th>单价</th>
+                    <th>数量</th>
+                    <th>小计</th>
+                    <th>操作</th>
+                </tr>
+                <tr v-for="(product,index) in products">
+                    <td>
+                        <input type="checkbox"
+                               v-model="product.isSelect"
+                               @change="checkOne"
+                        >
+                    </td>
+                    <td>
+                        {{index+1}}
+                    </td>
+                    <td>
+                        <img :src = "product.images" alt="product.info">
+                    </td>
+                    <td>
+                        {{product.title}}
+                    </td>
+                    <td>
+                        {{product.info}}
+                    </td>
+                    <td>
+                        {{product.price}}
+                    </td>
+                    <td>
+                        <input type="number" v-model.number="product.num" min="1">
+
+                    </td>
+                    <td>
+                        <!--filter 可以定义自定义过滤函数-->
+                        {{(product.price*product.num)|toFixed(2)}}
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" @click="remove(product)">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="9" style="text-align: right">总价:{{sum()|toFixed(2)}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+<script src="./node_modules/vue/dist/vue.js"></script>
+<script src="./promise-ajax.js"></script>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        filters:{
+            toFixed(input,parm1){
+                return '￥'+input.toFixed(parm1);
+            }
+        },
+        created(){
+            this.getData();
+        },
+        methods:{
+            // 总价功能
+            sum(){
+                return this.products.reduce((prev,next,index)=>{
+                    console.log(this.products[index]);
+                    if(!this.products[index].isSelect){
+                        return prev;
+                    }
+                    return prev+next.price * next.num;
+                },0)
+            },
+            // 全选功能函数
+            change(){
+                // 这里之所以不用filter 是因为filter在返回false的时候不会返回任何东西，所以在要返回boolean的时候不能用filter
+                this.products.forEach(item => {
+                    console.log(item.isSelect = this.CheckAll)
+                    return item.isSelect = this.CheckAll;
+                });
+            },
+            // 取消任一商品取消全选功能
+            checkOne(){
+                // 如果找到一个false就返回false 否则返回true
+                this.CheckAll = this.products.every((item)=>{
+                    return item.isSelect;
+                })
+            },
+            // 删除功能
+            remove(obj){
+                console.log(obj);
+                this.products = this.products.filter(item => {
+                    console.log(item);
+                        return item!==obj;
+                })
+            },
+            // 获取数据
+            getData(){
+                PromiseAjax({url:'./tsconfig.json'}).then((data)=>{
+                    this.products = data.products;
+                    // 在获取到数据后就开始检查是否有未选择的
+                    this.checkOne();
+                },(err)=>{
+                    console.log(err);
+                })
+            }
+        },
+        data: {
+            CheckAll: false,
+            products :[]
+        }
+    })
+</script>
+</html>

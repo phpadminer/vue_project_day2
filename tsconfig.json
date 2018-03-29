@@ -8,7 +8,7 @@
       "price": 67,
       "num": 4,
       "count": "",
-      "isSelect": false
+      "isSelect": true
     },
     {
       "id": 2,
@@ -18,7 +18,7 @@
       "price": 7.1,
       "num": 3,
       "count": "",
-      "isSelect": false
+      "isSelect": true
     },
     {
       "id": 3,
@@ -28,7 +28,7 @@
       "price": 47.5,
       "num": 3,
       "count": "",
-      "isSelect": false
+      "isSelect": true
     },
     {
       "id": 4,
@@ -38,7 +38,7 @@
       "price": 4.73,
       "num": 5,
       "count": "",
-      "isSelect": false
+      "isSelect": true
     }
   ]
 }
