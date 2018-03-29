@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/phpadminer/vue_project_day2#readme",
   "devDependencies": {
+    "animate.css": "^3.6.1",
     "vue": "^2.5.16"
   },
   "dependencies": {

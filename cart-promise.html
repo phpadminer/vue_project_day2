@@ -12,8 +12,8 @@
             <table class="table table-hover table-bordered">
                 <h2 class="center">购物车</h2>
                 <tr>
-                    <!--click点击是 checkbox这时候状态还没有变化 所以这里用change事件-->
-                    <th>全选  <input type="checkbox" v-model="CheckAll" @change="change"></th>
+                    <!--click点击时 checkbox这时候状态还没有变化 所以这里用change事件-->
+                    <th>全选  <input type="checkbox" v-model="checkAll"></th>
                     <th>序号</th>
                     <th>商品</th>
                     <th>商品名称</th>
@@ -70,6 +70,24 @@
 <script>
     var vm = new Vue({
         el: '#app',
+        // 在computed中定义的函数最终也会被挂载在VM上 所以不能和methods data重名
+        computed:{
+            checkAll:{
+                //当发生变化的时候会调用
+                get(){
+                    //如果有一一个违背选择就不全选
+                    return this.products.every((item)=>{
+                        return item.isSelect;
+                    })
+                },
+                // 当执行操作的时候会调用
+                set(val){
+                    this.products.forEach((p)=>{
+                        return p.isSelect = val;
+                    })
+                }
+            }
+        },
         filters:{
             toFixed(input,parm1){
                 return '￥'+input.toFixed(parm1);
@@ -89,14 +107,14 @@
                     return prev+next.price * next.num;
                 },0)
             },
-            // 全选功能函数
-            change(){
-                // 这里之所以不用filter 是因为filter在返回false的时候不会返回任何东西，所以在要返回boolean的时候不能用filter
-                this.products.forEach(item => {
-                    console.log(item.isSelect = this.CheckAll)
-                    return item.isSelect = this.CheckAll;
-                });
-            },
+            // 全选功能函数 已经被computed给替换掉了
+            // change(){
+            //     // 这里之所以不用filter 是因为filter在返回false的时候不会返回任何东西，所以在要返回boolean的时候不能用filter
+            //     this.products.forEach(item => {
+            //         console.log(item.isSelect = this.CheckAll)
+            //         return item.isSelect = this.CheckAll;
+            //     });
+            // },
             // 取消任一商品取消全选功能
             checkOne(){
                 // 如果找到一个false就返回false 否则返回true
@@ -124,7 +142,7 @@
             }
         },
         data: {
-            CheckAll: false,
+            // CheckAll: false,
             products :[]
         }
     })
